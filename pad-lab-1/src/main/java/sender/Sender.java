@@ -19,9 +19,11 @@ public class Sender {
 
     public static void main(String[] args) throws SAXException, InterruptedException, ExecutionException, TransformerException, IOException, JAXBException, ParserConfigurationException {
         Sender sender = new Sender();
+
         sender.connectAndSendMsg(false,"Artiom","Salut. Acesta e mesajul meu.",null,null);
         sender.connectAndSendMsg(false,"Andrei","Buna! Invat la FAF!",null,null);
         sender.connectAndSendMsg(false,"Vasile","Eu fac design fine!",null,null);
+
     }
 
     public Sender() {
