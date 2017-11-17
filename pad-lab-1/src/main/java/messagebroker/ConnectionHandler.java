@@ -29,7 +29,7 @@ public class ConnectionHandler implements CompletionHandler<AsynchronousSocketCh
             // Create a new completion handler for reading to and writing
             // from the new client
             // Read from the client
-            client.read(newAttach.getBuffer(), newAttach, new ReadWriteHandler());
+            client.read(newAttach.getBuffer(), newAttach, new ReadHandler());
         }
         catch (IOException e) {
             e.printStackTrace();

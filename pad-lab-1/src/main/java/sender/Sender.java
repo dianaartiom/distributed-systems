@@ -1,65 +1,47 @@
 package sender;
 
+import model.XmlObject;
+import org.xml.sax.SAXException;
+import utils.DomToString;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class Sender {
-    public static final String HOST = "localhost";
-    public static final int PORT = 6789;
-    public static String sentence = "Hello from sender\n!";
 
-    public static void main(String[] args) {
-        // Use a try-with-resources to open a channel
-        try (AsynchronousSocketChannel channel
-                     = AsynchronousSocketChannel.open()) {
-            // Connect the client to the server
-            String serverName = "localhost";
-            int serverPort = 6789;
-            SocketAddress serverAddr =
-                    new InetSocketAddress(serverName, serverPort);
+    public static void main(String[] args) throws SAXException, InterruptedException, ExecutionException, TransformerException, IOException, JAXBException, ParserConfigurationException {
+        Sender sender = new Sender();
+        sender.connectAndSendMsg(false,"Artiom","Salut. Acesta e mesajul meu.",null,null);
+        sender.connectAndSendMsg(false,"Andrei","Buna! Invat la FAF!",null,null);
+        sender.connectAndSendMsg(false,"Vasile","Eu fac design fine!",null,null);
+    }
 
-            Future<Void> result = channel.connect(serverAddr);
-            System.out.println("Connecting to the server...");
+    public Sender() {
+    }
 
-            // Wait for the connection to complete
-            result.get();
+    public void connectAndSendMsg(Boolean isSubscriber,String name, String msg, String host, Long port) throws IOException, ExecutionException, InterruptedException, ParserConfigurationException, SAXException, TransformerException, JAXBException {
+        Socket socket = new Socket();
+        SocketAddress socketAddress = new InetSocketAddress("localhost", 6789);
+        socket.connect(socketAddress);
+        OutputStream out = socket.getOutputStream();
+        DataOutputStream clientDataSend = new DataOutputStream(out);
+        XmlObject xmlObject = new XmlObject(
+                isSubscriber,name,msg,host,port
+        );
+        String str = DomToString.getXmlStringFromObject(XmlObject.class,xmlObject);
+        byte[] bytes = str.getBytes();
+        clientDataSend.write(bytes,0,bytes.length);
+        out.close();
+        clientDataSend.close();
+        socket.close();
 
-            // Connection to the server is complete now
-            System.out.println("Connected to the server...");
-
-            // Start reading from and writing to the server
-            Attachment attach = new Attachment();
-            attach.channel = channel;
-            attach.buffer = ByteBuffer.allocate(2048);
-            attach.isRead = false;
-            attach.mainThread = Thread.currentThread();
-
-            // Place the "Hello" message in the buffer
-            Charset cs = Charset.forName("UTF-8");
-            String msg = "Hello";
-            byte[] data = msg.getBytes(cs);
-            attach.buffer.put(data);
-            attach.buffer.flip();
-
-            // Write to the server
-            ReadWriteHandler readWriteHandler = new ReadWriteHandler();
-            channel.write(attach.buffer, attach, readWriteHandler) ;
-
-            // Let this thread wait for ever on its own death until interrupted
-            attach.mainThread.join();
-        }
-        catch (ExecutionException | IOException e) {
-            e.printStackTrace();
-        }
-        catch(InterruptedException e) {
-            System.out.println("Disconnected from the server.");
-        }
     }
 }
