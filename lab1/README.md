@@ -11,11 +11,11 @@ message:
 	response
 ```
 
-routing key - directs the message to some Queue, which meets the regex <br />
-queueName - direcs the message to the Queue with the specified name<br />
-command - an int that tells the message what is to be used for(e.g. create queue, delete, etc.) <br />
-payload - "what" do you want to send <br />
-response - what did the broker do with the message<br />
+**routing key** - directs the message to some Queue, which meets the regex <br />
+**queueName** - direcs the message to the Queue with the specified name<br />
+**command** - an int that tells the message what is to be used for(e.g. create queue, delete, etc.) <br />
+**payload** - "what" do you want to send <br />
+**response** - what did the broker do with the message<br />
 
 #### The application works as follows:
 1. The message broker runs continuously and accepts clients to connect
