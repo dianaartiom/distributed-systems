@@ -10,7 +10,7 @@ public class CreateQueueCommand implements Command {
     private Message message;
     private Client client;
 
-    CreateQueueCommand(QueueData queueData, MessageReceivedFromClient messageReceivedFromClient) {
+    public CreateQueueCommand(QueueData queueData, MessageReceivedFromClient messageReceivedFromClient) {
         this.queueData = queueData;
         this.message = messageReceivedFromClient.getMessage();
         this.client = messageReceivedFromClient.getClient();

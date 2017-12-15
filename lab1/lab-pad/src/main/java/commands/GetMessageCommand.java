@@ -12,7 +12,7 @@ public class GetMessageCommand implements Command {
     private Message message;
     private Client client;
 
-    GetMessageCommand(QueueData queueData, MessageReceivedFromClient messageReceivedFromClient) {
+    public GetMessageCommand(QueueData queueData, MessageReceivedFromClient messageReceivedFromClient) {
         this.queueData = queueData;
         this.message = messageReceivedFromClient.getMessage();
         this.client = messageReceivedFromClient.getClient();
@@ -21,7 +21,19 @@ public class GetMessageCommand implements Command {
     @Override
     public void execute() {
         BlockingQueue<Message> queue = this.queueData.getQueue(message.getQueueName());
-        Message message = queue.poll();
+        Message message = new Message();
+        if (queue == null) {
+            message.setResponse("No queue such queue.");
+            this.client.write(message);
+            return;
+        }
+        if (queue.size() > 0) {
+            message = queue.poll();
+            message.setResponse("Message extracted from queue: " + message.getPayload());
+            this.client.write(message);
+            return;
+        }
+        message.setResponse("No messages in queue.");
         this.client.write(message);
     }
 }

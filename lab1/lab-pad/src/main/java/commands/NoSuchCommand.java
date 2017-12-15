@@ -18,7 +18,6 @@ public class NoSuchCommand implements Command {
 
     @Override
     public void execute() {
-        //todo send no such command to client
         this.message.setResponse("No such command. Operation aborted.");
         client.write(this.message);
     }

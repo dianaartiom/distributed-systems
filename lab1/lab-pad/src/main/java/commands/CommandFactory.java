@@ -20,8 +20,15 @@ public class CommandFactory {
             case DELETE_QUEUE:
                 return new RemoveQueueCommand(this.queueData, message);
             case ROUTE_DIRECT_MESSAGE:
+                return new RouteDirectMessageCommand(this.queueData, message);
             case ROUTE_TOPIC_MESSAGE:
+                return new RouteTopicMessageCommand(this.queueData, message);
             case GET_MESSAGE_FROM_QUEUE:
+                return new GetMessageCommand(this.queueData, message);
+            case SUBSCRIBE:
+                return new SubscribeCommand(this.queueData, message);
+            case GET_TOPIC_MESSAGE:
+                return new GetTopicMessageCommand(this.queueData, message);
             default:
                 return new NoSuchCommand(this.queueData, message);
         }
@@ -33,7 +40,9 @@ public class CommandFactory {
         ROUTE_DIRECT_MESSAGE(2),
         ROUTE_TOPIC_MESSAGE(3),
         GET_MESSAGE_FROM_QUEUE(4),
-        NO_SUCH_COMMAND(5);
+        NO_SUCH_COMMAND(5),
+        SUBSCRIBE(6),
+        GET_TOPIC_MESSAGE(7);
 
         private int commandIndex;
 

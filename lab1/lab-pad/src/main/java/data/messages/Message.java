@@ -46,4 +46,15 @@ public class Message {
     public void setPayload(String payload) {
         this.payload = payload;
     }
+
+    public Message clone() {
+        Message message = new Message();
+        message.setResponse(this.response);
+        message.setPayload(this.payload);
+        message.setCommand(this.command);
+        message.setQueueName(this.queueName);
+        message.setRoutingKey(this.routingKey);
+        return message;
+    }
+
 }

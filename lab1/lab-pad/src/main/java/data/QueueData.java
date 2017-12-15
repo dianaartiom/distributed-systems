@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QueueData {
     private Map<String, BlockingQueue<Message>> queues;
@@ -27,8 +29,9 @@ public class QueueData {
 
     public List<BlockingQueue<Message>> getQueueByReqExp(String regExp){
         List<BlockingQueue<Message>> selectedQueues = new ArrayList<>();
+        Pattern p = Pattern.compile(regExp);
         queues.forEach((queueId, queue) -> {
-            if (queueId.matches(regExp)){
+            if (p.matches(regExp, queueId)){
                 selectedQueues.add(queue);
             }
         });
