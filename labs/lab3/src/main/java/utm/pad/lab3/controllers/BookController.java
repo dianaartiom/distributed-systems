@@ -6,39 +6,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-import utm.pad.lab3.model.Book;
-import utm.pad.lab3.repository.BookRepository;
+import org.springframework.web.bind.annotation.*;
+import utm.pad.lab3.builders.BookBuilder;
+import utm.pad.lab3.dtos.BookDTO;
+import utm.pad.lab3.services.BookService;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @Controller
+@RequestMapping("/book")
 public class BookController {
 
+    @Autowired
+    private BookService bookService;
 
-        @Autowired
-        BookRepository bRepository;
-
-        @PostMapping(path = "/")
-        public ModelAndView post(@ModelAttribute Book book, Model model){
-            bRepository.insert(book);
-            model.addAttribute("content", bRepository.findAll());
-            return new ModelAndView("list");
-        }
-
-        @GetMapping(path = "/")
-        public ModelAndView index(Model model) {
-            Book bok = new Book();
-            bok.setTitle("not use this");
-            bok.setAuthor("not use this");
-            bRepository.insert(bok);
-            return new ModelAndView("index","book", new Book());
-        }
-
-        @GetMapping(path = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
-        public HttpEntity<?> json(){
-            return new ResponseEntity(bRepository.findByTitle("not use this"), HttpStatus.OK);
-        }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<?> getAllBooks() {
+        return new ResponseEntity(bookService.findAll(), OK);
     }
+
+    /* pentru mine ca sa pot introduce carti */
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<?> createBook(@RequestBody BookDTO bookDTO) {
+
+        return new ResponseEntity(bookService.insert(BookBuilder.get(bookDTO)), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<?> getBookById(@PathVariable String id) {
+        return new ResponseEntity(bookService.findById(id), OK);
+    }
+
+}

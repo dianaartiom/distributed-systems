@@ -6,8 +6,13 @@ import utm.pad.lab3.model.Book;
 
 import java.util.List;
 
+
 @Repository
-public interface BookRepository extends MongoRepository<Book,String> {
+public interface BookRepository extends MongoRepository<Book,String>{
+    List<Book> findAll();
     List<Book> findByTitle(String title);
-    List<Book> findByAuthor(String author);
+    Book findBookById(String id);
+    List<Book> findAllByAuthorFirstName(String authorFirstName);
+    List<Book> findAllByAuthorLastName(String authorLastName);
+    List<Book> findAllByGenre(String genre);
 }
