@@ -15,7 +15,7 @@ public class Client {
     private BufferedReader in;
     private PrintWriter outputStream;
 
-    Client(Socket connectorSocket) {
+    public Client(Socket connectorSocket) {
         try {
             this.in =  new BufferedReader(new InputStreamReader(connectorSocket.getInputStream()));
             this.outputStream =  new PrintWriter(connectorSocket.getOutputStream(), true);
@@ -32,7 +32,7 @@ public class Client {
         }
     }
 
-    void start() {
+    public void start() {
         new Thread(this::read).start();
     }
 
@@ -53,7 +53,7 @@ public class Client {
         }
     }
 
-    void setOnMessageReceived(Consumer<MessageReceivedFromClient> onMessageReceived) {
+    public void setOnMessageReceived(Consumer<MessageReceivedFromClient> onMessageReceived) {
         this.onMessageReceived = onMessageReceived;
     }
 }

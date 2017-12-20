@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Subscriber {
-
-    private static Socket socket;
+public class QueueCreator {
     private static Client client;
+    private static Socket socket;
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
         client = new Client(getSocket());
         client.start();
 
@@ -21,11 +19,12 @@ public class Subscriber {
         new Thread(() -> {
             while (true) {
                 try {
+//                    System.out.println("sent !");
                     Message message = new Message();
-                    message.setCommand(6);
-                    message.setRoutingKey("Google.[a-z]*");
-                    message.setQueueName("default");
-                    message.setPayload("default");
+                    message.setCommand(0);
+                    message.setRoutingKey("Google.arst");
+                    message.setQueueName("Google.arst");
+                    message.setPayload("some payload");
                     client.write(message);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

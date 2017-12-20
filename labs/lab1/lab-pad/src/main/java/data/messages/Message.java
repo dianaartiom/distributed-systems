@@ -56,5 +56,4 @@ public class Message {
         message.setRoutingKey(this.routingKey);
         return message;
     }
-
 }

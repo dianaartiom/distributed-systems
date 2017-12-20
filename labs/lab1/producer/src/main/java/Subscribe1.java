@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class QueueCreator {
+public class Subscribe1 {
     private static Client client;
     private static Socket socket;
 
@@ -14,6 +14,7 @@ public class QueueCreator {
 
         client.setOnMessageReceived((message)-> {
             System.out.println("Server answered: " + message.getResponse());
+            System.out.println("Message payload: " + message.getPayload());
         });
 
         new Thread(() -> {
@@ -21,10 +22,10 @@ public class QueueCreator {
                 try {
 //                    System.out.println("sent !");
                     Message message = new Message();
-                    message.setCommand(0);
-                    message.setRoutingKey("\\w");
-                    message.setQueueName("Google.arst");
-                    message.setPayload("some payload");
+                    message.setCommand(6);
+                    message.setRoutingKey("Google.[a-z]*");
+                    message.setQueueName("bbbb");
+                    message.setPayload("wrong");
                     client.write(message);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

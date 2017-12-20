@@ -29,6 +29,8 @@ public class CommandFactory {
                 return new SubscribeCommand(this.queueData, message);
             case GET_TOPIC_MESSAGE:
                 return new GetTopicMessageCommand(this.queueData, message);
+            case BROADCAST:
+                return new BroadcastCommand(this.queueData, message);
             default:
                 return new NoSuchCommand(this.queueData, message);
         }
@@ -42,7 +44,8 @@ public class CommandFactory {
         GET_MESSAGE_FROM_QUEUE(4),
         NO_SUCH_COMMAND(5),
         SUBSCRIBE(6),
-        GET_TOPIC_MESSAGE(7);
+        GET_TOPIC_MESSAGE(7),
+        BROADCAST(8);
 
         private int commandIndex;
 

@@ -5,6 +5,7 @@ import data.messages.Message;
 public class MessageReceivedFromClient {
     private Client client;
     private Message message;
+    private String response;
 
     public MessageReceivedFromClient(Client client, Message message) {
         this.client = client;
@@ -25,5 +26,9 @@ public class MessageReceivedFromClient {
 
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public String getResponse() {
+        return response;
     }
 }
