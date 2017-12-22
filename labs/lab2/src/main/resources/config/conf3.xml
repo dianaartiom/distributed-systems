@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<nodes>
+    <node>
+        <ip>127.0.0.1</ip>
+        <port>7002</port>
+    </node>
+    <node>
+        <ip>127.0.0.1</ip>
+        <port>7003</port>
+    </node>
+</nodes>

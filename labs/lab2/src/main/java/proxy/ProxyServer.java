@@ -11,20 +11,40 @@ public class ProxyServer extends Thread {
         UDP udp = new UDP();
         ArrayList<Node> nodes = udp.receiveInfoAboutRunningNodes();
 
-        for (Node node :
-                nodes) {
-            System.out.println(node);
-        }
-
-        // Computing the best node
         Node bestNode = selectBestNode(nodes);
+        System.out.println("Best node " + bestNode);
+
         TCPServer tcpServer = new TCPServer(5555);
         tcpServer.acceptClients(bestNode);
     }
 
     private Node selectBestNode(ArrayList<Node> nodes) {
-        Node bestNode = nodes.get(0);
+        ArrayList<Integer> links = new ArrayList<>();
+
+        for (Node node : nodes) {
+            links.add(node.getLinksNumber());
+        }
+
+        int maxLinks = getMaximalNumberOfLinks(links);
+
+        Node bestNode = null;
+        for (int j = 0; j < nodes.size(); j++) {
+            if (maxLinks == nodes.get(j).getLinksNumber()) {
+                bestNode = nodes.get(j);
+            }
+        }
+
         return bestNode;
     }
 
+    private int getMaximalNumberOfLinks(ArrayList<Integer> links) {
+        int maxLinks = 0;
+        for (int i = 0; i < links.size(); i++) {
+            if (maxLinks < links.get(i)) {
+                maxLinks = links.get(i);
+            }
+        }
+
+        return maxLinks;
+    }
 }

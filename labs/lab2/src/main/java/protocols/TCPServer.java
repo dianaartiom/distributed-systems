@@ -1,5 +1,9 @@
 package protocols;
 
+import common.Command;
+import common.ECommand;
+import common.Employee;
+import common.Message;
 import nodes.Node;
 import proxy.ClientConnection;
 
@@ -45,27 +49,33 @@ public class TCPServer extends Thread {
     public void start(ArrayList<Node> nodes) {
         try {
             while (true) {
-                ArrayList<String> messList = new ArrayList<>();
+                ArrayList<Employee> employees = new ArrayList<>();
 
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("You are connected to " + serverSocket.getLocalPort());
+                System.out.println("connected to " + serverSocket.getLocalPort());
 
                 TCPConnection clientTcpCommunication = new TCPConnection();
-                String clientRequest = clientTcpCommunication.receiveMessage(clientSocket);
+                Message clientRequest = clientTcpCommunication.receiveMessage(clientSocket);
                 System.out.println(clientRequest);
 
                 for (Node node : nodes){
-//                        TCPCommunication tcpCommunication = new TCPCommunication();
-//                        tcpCommunication.startConnection(node.getLocation().getHostName(),node.getLocation().getPort());
-                    messList.add(node.getMessage());
+                    employees.addAll(node.getEmployees());
                 }
 
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                Command response = new Command();
 
-                System.out.println(messList);
-                out.println(messList);
+                employees.addAll(this.node.getEmployees());
 
+                String message = null;
+                if (clientRequest.getCommand().equals(ECommand.GET_ALL)) {
+                    message = response.getAll(employees);
+                } else if (clientRequest.getCommand().equals(ECommand.SORT)) {
+                    message = response.getSortedEmployees(employees, clientRequest);
+                }
 
+                System.out.println(message);
+                out.println(message);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

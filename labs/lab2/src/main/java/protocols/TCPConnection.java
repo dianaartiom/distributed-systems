@@ -1,5 +1,8 @@
 package protocols;
 
+import com.google.gson.Gson;
+import common.Message;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,17 +24,20 @@ public class TCPConnection {
         return in.readLine();
     }
 
-    public static String receiveMessage(Socket clientSocket) throws IOException {
+    public Message receiveMessage(Socket clientSocket) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        Gson gson = new Gson();
+        return gson.fromJson(in.readLine(), Message.class);
+    }
+
+    public String receiveMessageInJson(Socket clientSocket) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         return in.readLine();
     }
-//
-//    public String receiveMessageInJson(Socket clientSocket) throws IOException {
-//        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//        return in.readLine();
-//    }
 
-    public void sendMessage(String message) throws IOException {
-        out.println(message);
+    public void sendMessage(Message message) throws IOException {
+        Gson gson = new Gson();
+        final String json = gson.toJson(message);
+        out.println(json);
     }
 }

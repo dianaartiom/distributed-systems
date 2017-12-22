@@ -1,5 +1,7 @@
 package nodes;
 
+import common.Employee;
+
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -7,7 +9,8 @@ import java.util.ArrayList;
 public class Node implements Serializable {
 
     private InetSocketAddress location;
-    private String message = "ast";
+    private int linksNumber;
+    private ArrayList<Employee> employees;
     private ArrayList<InetSocketAddress> linksAdresses;
 
     public Node(InetSocketAddress inetSocketAddress ) {
@@ -15,12 +18,20 @@ public class Node implements Serializable {
 
     }
 
-    public String getMessage() {
-        return message;
+    public int getLinksNumber() {
+        return linksNumber;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public ArrayList<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setLinksNumber(int linksNumber) {
+        this.linksNumber = linksNumber;
+    }
+
+    public void setEmployees(ArrayList<Employee> employees) {
+        this.employees = employees;
     }
 
     public void setLocation(InetSocketAddress location) {
@@ -39,12 +50,12 @@ public class Node implements Serializable {
         return linksAdresses;
     }
 
-
     @Override
     public String toString() {
         return "Node{" +
                 "location=" + location +
-                ", message='" + message + '\'' +
+                ", linksNumber=" + linksNumber +
+                ", employees=" + employees +
                 ", linksAdresses=" + linksAdresses +
                 '}';
     }

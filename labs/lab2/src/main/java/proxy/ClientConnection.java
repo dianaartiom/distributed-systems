@@ -1,12 +1,12 @@
 package proxy;
 
+
+import com.google.gson.Gson;
+import common.Message;
 import nodes.Node;
 import protocols.TCPConnection;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class ClientConnection extends Thread {
@@ -23,23 +23,24 @@ public class ClientConnection extends Thread {
     public synchronized void start() {
         try {
             TCPConnection clientTcpCommunication = new TCPConnection();
-
-            String clientRequest = clientTcpCommunication.receiveMessage(clientSocket);
+            String clientRequest = clientTcpCommunication.receiveMessageInJson(clientSocket);
             System.out.println("Client Request is : " + clientRequest);
 
             Socket nodeSocket = new Socket(this.node.getLocation().getAddress(), this.node.getLocation().getPort());
             PrintWriter outNode = new PrintWriter(nodeSocket.getOutputStream(), true);
-            outNode.println(clientRequest + "new string");
+            outNode.println(clientRequest);
 
             BufferedReader inNode = new BufferedReader(new InputStreamReader(nodeSocket.getInputStream()));
             PrintWriter outClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
             String input = inNode.readLine();
-            outClient.write(input);
-            System.out.println("input" + input);
+
+            Gson gson = new Gson();
+            Message message = gson.fromJson(clientRequest, Message.class);
+            outClient.println(input);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
