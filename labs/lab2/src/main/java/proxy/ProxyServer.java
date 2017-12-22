@@ -1,29 +1,17 @@
 package proxy;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import nodes.Node;
+import protocols.UDP;
 
-public class ProxyServer {
-    private DatagramSocket socket;
-    private InetAddress group;
-    private byte[] buf;
+import java.util.ArrayList;
 
-    public static void main(String[] args) throws IOException {
-        ProxyServer proxyServer = new ProxyServer();
-        proxyServer.multicast("arst");
+public class ProxyServer extends Thread {
+    public void start() {
+        UDP udp = new UDP();
+        ArrayList<Node> nodes = udp.receiveInfoAboutRunningNodes();
+
+        System.out.println("This is the best node " + nodes.get(0));
+
     }
 
-    public void multicast(String multicastMessage)
-            throws IOException {
-        socket = new DatagramSocket();
-        group = InetAddress.getByName("230.0.0.0");
-        buf = multicastMessage.getBytes();
-
-        DatagramPacket packet
-                = new DatagramPacket(buf, buf.length, group, 4446);
-        socket.send(packet);
-        socket.close();
-    }
 }
