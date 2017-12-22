@@ -75,7 +75,7 @@ public class UDP {
         packet.setPort(this.mcPort);
         udpSocket.send(packet);
 
-        System.out.println("Sent a  multicast message from node with ip address and port:" + node.getLocation());
+        System.out.println("Sent a  multicast message from node with ip and port:" + node.getLocation());
         udpSocket.close();
     }
 }

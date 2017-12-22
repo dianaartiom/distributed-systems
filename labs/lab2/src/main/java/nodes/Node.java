@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Node implements Serializable {
 
     private InetSocketAddress location;
-    private String message;
+    private String message = "ast";
     private ArrayList<InetSocketAddress> linksAdresses;
 
     public Node(InetSocketAddress inetSocketAddress ) {
